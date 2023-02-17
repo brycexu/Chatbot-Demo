@@ -3,12 +3,7 @@ from streamlit_chat import message
 
 def generate_response(question):
     print(question)
-    """
-    Run our system here to generate an answer
-    
-    answer = system.generate_answer(question)
-    
-    """
+    # Run our system here to generate an answer = system.generate_answer(question)
     answer = "This is a default answer."
     return answer
 
