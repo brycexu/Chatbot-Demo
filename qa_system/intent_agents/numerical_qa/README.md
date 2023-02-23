@@ -1,0 +1,10 @@
+# Updating agents with new questions
+We will use the `RatioAgent` to show how to update an agent. `RatioAgent`s handle all questions of the type `"What is the <ratio_name> ratio of <company_name>?"`. Each new `<ratio_name>` has to be mapped to a numerator and a denominator, which the `RatioAgent` will then find the correct value for each, using an API like `yfinance`, the FactualQA system, etc., then divide and return as the answer. To see how this works for existing ratios:
+1. Open `ratio.py`, and go to the `RatioAgent` class. This class implements a `_list_factual_qns` method, which defines the mapping between each ratio and the numerator-denominator pair. Take a moment to see how the mapping is defined for the ratios already implemented.
+2. The keys in the mapping are unique `<ratio_name>`s. Inside each value, there are again two keys: one corresponding to obtaining the value via an API (by defining the keys which index the API properly s.t. it returns the correct values), another for obtaining the value via the FactualQA system (by defining queries in natural language). Take a moment to see how this is achieved for the ratios already implemented.
+
+This is how you add a new ratio to the `RatioAgent`:
+1. Open `ratio.py`, and go to the `RatioAgent` class. Then go to the `_list_factual_qns` method.
+2. Add a new, unique key into the `all_ratios` object to identify the new `<ratio_name>`, and assign a dictionary as its value. Populate this dictionary according to the next steps.
+3. In the dictionary, add an `'api'` key, and a dictionary containing the keys with which to index the `yfinance` API to get the correct value. For example, for the `debtRatio` ratio, we specify the company name and the aspect we are interested in. You would need to determine which key in the `yfinance` api would give you the correct value for the ratio you are implementing.
+4. In the dictionary, add a `'FactualQA'` key, and a dictionary containing queries in natural language which, if answered, returns the correct value. For example, for the `debtRatio` ratio, we ask for the company name and the aspect we are interested in in natural language.

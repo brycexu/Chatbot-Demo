@@ -1,0 +1,147 @@
+annual holdings turnover
+shares outstanding
+circulating supply
+ebitda margins
+most recent quarter
+short percent of float
+held percent institutions
+zip
+target median price
+industry
+morning star overall rating
+algorithm
+legal type
+dividend rate
+number of analyst opinions
+shares short prior month
+full time employees
+total cash
+state
+float shares
+total revenue
+free cashflow
+three month average volume
+price hint
+payout ratio
+current ratio
+dividend yield
+message board id
+pre market price
+nav price
+last split factor
+last dividend date
+peg ratio
+annual report expense ratio
+timezone
+held percent insiders
+exchange
+return on equity
+forward eps
+website
+last split date
+gmt off set milliseconds
+profit margins
+return on assets
+earnings quarterly growth
+long name
+max age
+short ratio
+tradeable
+coin market cap link
+trailing peg ratiocurrency
+enterprise value
+quote type
+last dividend value
+fifty day average
+year high
+from currency
+open interest
+revenue per share
+previous close
+market cap
+day high
+country
+recommendation key
+five year average return
+shares
+year chang
+date short interest
+financial currency
+ask
+fund family
+morning star risk rating
+address
+ten day average volume
+target high price
+is esg populated
+max supply
+52 week change
+gross margins
+total cash per share
+category
+day low
+ytd return
+enterprise to ebitda
+price to sales trailing12 months
+two hundred day average
+last volume
+phone
+total debt
+gross profits
+sector
+total assets
+enterprise to revenue
+book value
+beta
+company officers
+next fiscal year end
+last fiscal year end
+last market
+revenue growth
+market
+ask size
+operating cashflow
+earnings growth
+volume all currencies
+logo url
+target mean price
+target low price
+bid
+three year average return
+short name
+yield
+last price
+revenue quarterly growth
+operating margins
+open
+trailing annual dividend yield
+long business summary
+forward PE
+ex dividend date
+year low
+ebitda
+five year avg dividend yield
+volume24 hr
+trailing eps
+beta3 year
+city
+implied shares outstanding
+bid size
+shares short previous month date
+to currency
+start date
+regular market previous close
+expire date
+sand p52 week change
+quick ratio
+debt to equity
+last cap gain
+fund inception date
+strike price
+recommendation mean
+price to book
+trailing PE
+shares percent shares out
+trailing annual dividend rate
+shares short
+net income to common

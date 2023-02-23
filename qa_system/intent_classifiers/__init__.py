@@ -1,0 +1,2 @@
+from .neural import NeuralIntentClassifier
+from .rule_based import RuleBasedIntentClassifier
