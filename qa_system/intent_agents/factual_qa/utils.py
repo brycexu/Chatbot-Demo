@@ -20,7 +20,7 @@ def get_ticker_name(company_name):
     return company_code
 
 
-NER_MODEL = {"API_URL": "https://api-inference.huggingface.co/models/dslim/bert-base-NER",
+NER_MODEL = {"API_URL": "https://api-inference.huggingface.co/models/dslim/bert-base-NER-uncased",
              "headers": {"Authorization": "Bearer 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"}}
 SENTENCE_EMBEDDING_MODEL = {"API_URL": "https://api-inference.huggingface.co/models/sentence-transformers/all-MiniLM-L6-v2",
                             "headers": {"Authorization": "Bearer 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"}}
@@ -34,4 +34,3 @@ def query_model(API_URL, headers, inputs):
     }
     response = requests.post(API_URL, headers=headers, json=payload)
     return response.json()
-
