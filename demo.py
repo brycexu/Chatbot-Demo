@@ -1,11 +1,15 @@
 import streamlit as st
 from streamlit_chat import message
+from qa_system import QA
+
+qa = QA()
 
 def generate_response(question):
-    print(question)
+    # print(question)
     # Run our system here to generate an answer = system.generate_answer(question)
-    answer = "This is a default answer."
-    return answer
+    # answer = "This is a default answer."
+    response = qa.answer(question)
+    return response
 
 st.title("BNY Mellon Chatbot Project")
 
