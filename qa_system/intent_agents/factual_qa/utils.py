@@ -2,6 +2,9 @@ import requests
 from urllib.request import urlopen
 import certifi
 import json
+import re
+import numpy as np
+
 
 def get_ticker_name(company_name):
     '''
@@ -50,6 +53,29 @@ def get_company_name(query):
         if token['entity_group'] == 'ORG':
             company_name = token['word']
     return company_name
+
+
+def get_key(query, company_name):
+    
+    with open('qa_system/constants/supported_ratio_names.txt', 'r') as f:
+        keys = f.read().splitlines()
+
+    sentences = []
+    for key in keys:
+        new_key = re.sub(r"([A-Z])", r" \1", key).split()
+        new_key = " ".join(new_key)
+        new_key = re.sub(r"_", r" ", new_key)
+        new_key = new_key.lower()
+        sentences.append('The ' + new_key + ' of ' + company_name)
+
+    inputs = {
+        "source_sentence": query,
+        "sentences": sentences
+    }
+    scores = query_model(SENTENCE_EMBEDDING_MODEL["API_URL"], SENTENCE_EMBEDDING_MODEL["headers"], inputs)
+    idx = np.argmax(scores)
+    return keys[idx], sentences[idx], scores[idx]
+
 
 def get_jsonparsed_data(url):
     """

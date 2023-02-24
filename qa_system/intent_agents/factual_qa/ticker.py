@@ -56,4 +56,4 @@ class TickerAgent:
                 return f"Unable to fetch ticker information of {company_name}", 0
         key, sentence, score = self.get_key(query, list(ticker_info.keys()), company_name)
         answer = f"{sentence} is {ticker_info[key]}."
-        return answer, score
+        return answer, ticker_info[key], score

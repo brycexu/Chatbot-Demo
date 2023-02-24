@@ -2,7 +2,7 @@ from .percent_change import PercentChangeAgent
 from .ratio import RatioAgent
 
 def return_zero(query):
-    return 0
+    return 1
 
 class NumericalQA:
 
@@ -22,6 +22,7 @@ class NumericalQA:
         # move this to a common location later so that other parts of the QA shares a single source of truth
         self.intent_id_to_name = {
             0: 'ratio',
+            1: 'percent_change',
             # ...
             # n: 'intent_n'
         }
@@ -29,6 +30,7 @@ class NumericalQA:
         # intent agents
         self.intent_agents = {
             'ratio': RatioAgent(),  # class that implements an `answer` method
+            'percent_change': PercentChangeAgent(),
             # ...
             # 'intent_n': IntentNQA()
         }

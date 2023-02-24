@@ -1,10 +1,14 @@
-from .args_extractors import ExactMatchCompanyAspectExtractor, ExactMatchCompanyTickerExtractor
+from .args_extractors import ExactMatchCompanyAspectExtractor, ExactMatchCompanyTickerExtractor, YearExtractor
+from qa_system.intent_agents.factual_qa.factual_qa_agent import FactualQA
+from qa_system.intent_agents.factual_qa.utils import get_key, get_company_name
+
 import traceback
+
 
 class PercentChangeAgent:
 
 
-    def __init__(self, demo:bool = False):
+    def __init__(self):
         '''
         Typical question answered by this agent: 
             "what is the percentage change "
@@ -17,9 +21,8 @@ class PercentChangeAgent:
         '''
 
         # callable that answers factual questions
-        self.factual_qa_system = None
-
-        self.demo = demo
+        self.api_qa_system = None
+        self.factual_qa_system = FactualQA().answer
 
 
     def _extract_args(self, query:str):
@@ -34,10 +37,35 @@ class PercentChangeAgent:
             'end_time': '2012'
         }
         '''
-        return {}
+
+        # company name
+        company = get_company_name(query)
+
+        # key
+        aspect, _, _ = get_key(query, company)
+
+        # years
+        years_in_query = YearExtractor()(query)
+        if len(years_in_query) > 2:
+            raise NotImplementedError(f'Warning: more than 2 ({len(years_in_query)}) years mentioned in the query.')
+        elif len(years_in_query) < 2:
+            years_in_query = [None, None]
+
+        args = {
+            'aspect': aspect,
+            'company': company,
+            'start_time': years_in_query[0],
+            'end_time': years_in_query[1],
+        }
+
+        for k, v in args.items():
+            if v is None:
+                raise NotImplementedError(f'Warning: `{k}` in query "{query}" not recognized.')
+
+        return args
     
 
-    def _list_factual_qns(self):
+    def _list_factual_qns(self, retrieval_type='FactualQA'):
         '''
         Given the extracted arguments, lists the factual questions it needs to ask
         from the factual QA system, an external API such as yfinance or finnhub, etc.
@@ -57,25 +85,29 @@ class PercentChangeAgent:
         # list of factual questions that need to be answered to answer the question
         factual_questions = {
 
-            # <aspect> of <company> at <start_time>
-            'aspect_at_start': (  # aspect_at_start is a generic identifier of the fact
-                f'What is the {args["aspect"]} '
-                f'of {args["company"]} '
-                f'in {args["start_time"]}?'
-            ),
+            'api': {},  # not implemented
 
-            # <aspect> of <company> at <end_time>
-            'aspect_at_end': (
-                f'What is the {args["aspect"]} '
-                f'of {args["company"]} '
-                f'in {args["end_time"]}?'
-            ),
+            'FactualQA': {
+                # <aspect> of <company> at <start_time>
+                'aspect_at_start': (  # aspect_at_start is a generic identifier of the fact
+                    f'What is the {args["aspect"]} '
+                    f'of {args["company"]} '
+                    f'in {args["start_time"]}?'
+                ),
+
+                # <aspect> of <company> at <end_time>
+                'aspect_at_end': (
+                    f'What is the {args["aspect"]} '
+                    f'of {args["company"]} '
+                    f'in {args["end_time"]}?'
+                ),
+            }
         }
 
-        return factual_questions
+        return factual_questions[retrieval_type]
 
 
-    def _answer_factual_qns(self, factual_questions):
+    def _answer_factual_qns(self, factual_questions, retrieval_type='FactualQA'):
         '''
         Given the questions determined in `factual_questions`, call the QA system
         or the external API to answer the questions.
@@ -94,8 +126,14 @@ class PercentChangeAgent:
         # request the answer to each question from the factual QA system
         for qn_id, qn in factual_questions.items():
             
-            answer = self.factual_qa_system(qn)
-            factual_questions[qn_id] = answer
+            if retrieval_type == 'api':
+                answer = self.api_qa_system(qn)
+            elif retrieval_type == 'FactualQA':
+                answer, answer_num, score = self.factual_qa_system(qn)
+            else:
+                raise ValueError('Error: retrieval_type not recognized')
+            
+            factual_question_answer_pairs[qn_id] = answer_num
 
         return factual_question_answer_pairs
 
@@ -109,15 +147,28 @@ class PercentChangeAgent:
         try:
             args = self._extract_args(query)
             self.args = args
-            # print('args:', args)
+            # print('[RatioAgent.answer] args:', args)
+
+            factual_qns      = self._list_factual_qns()
+            # print('[RatioAgent.answer] factual_qns', factual_qns)
+
+            factual_qa_pairs = self._answer_factual_qns(factual_qns)
+            # print('[RatioAgent.answer] factual_qa_pairs', factual_qa_pairs)
+
+            numerical_answer = self._calculate_answer(factual_qa_pairs)
+            # print('[RatioAgent.answer] numerical_answer', numerical_answer)
+
+            return (
+                f'The percentage change in '
+                f'the {self.args["aspect"]} '
+                f'of {self.args["company"]} '
+                f'between {self.args["start_time"]} '
+                f'and {self.args["end_time"]} '
+                f'is {numerical_answer:.3f}'
+            ), numerical_answer, -1
         except NotImplementedError:
             return traceback.format_exc()
 
-        factual_qns      = self._list_factual_qns()
-        factual_qa_pairs = self._answer_factual_qns(factual_qns)
-        numerical_answer = self._calculate_answer(factual_qa_pairs)
-
-        return f'{query} is {numerical_answer:.3f}'
 
 
 if __name__ == '__main__':

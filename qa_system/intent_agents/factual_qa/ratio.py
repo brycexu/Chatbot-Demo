@@ -51,5 +51,5 @@ class RatioAgent:
         ratio_info = self.get_ratio_info(ticker_name, year)
         key, sentence, score = self.get_key(query, list(ratio_info.keys()), company_name)
         answer = f"{sentence} is {ratio_info[key]} in {year}."
-        return answer, score
+        return answer, ratio_info[key], score  # answer in sentence form, numerical answer, confidence
 

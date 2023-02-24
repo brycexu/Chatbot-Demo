@@ -1,4 +1,5 @@
 from .ticker import TickerAgent
+from .ratio import RatioAgent
 import re
 
 def return_zero(query):
@@ -23,7 +24,7 @@ class FactualQA:
         # intent agents
         self.intent_agents = {
             'ticker': TickerAgent(),  # class that implements an `answer` method
-            'ratio': TickerAgent(),
+            'ratio': RatioAgent(),
             # 'intent_n': IntentNQA()
         }
 
@@ -38,4 +39,6 @@ class FactualQA:
 
         # pass query to intent handler
         agent = self.intent_agents[intent_name]
-        return agent.answer(query)
+        answer = agent.answer(query)
+
+        return answer

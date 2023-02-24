@@ -70,7 +70,7 @@ class QA:
         # pass query to intent handler
         agent = self.intent_agents[intent_name]
         try:
-            response, score = agent.answer(query)
+            response, response_numerical, score = agent.answer(query)
         except:
             return "We are currently unable to answer this category of question."
         return response
