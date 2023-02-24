@@ -78,5 +78,4 @@ class QA:
 if __name__ == '__main__':
     qa = QA()
     # response = qa.answer('What is the debt ratio of Tesla?')
-    response = qa.answer('What is the gross profit of Tesla?')
-    print(response)
+    response = qa.answer('What is the quick ratio of Amazon in 2020?')
