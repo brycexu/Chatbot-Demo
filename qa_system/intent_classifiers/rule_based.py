@@ -18,10 +18,10 @@ class RuleBasedIntentClassifier:
 
     def __call__(self, query):
         query = query.lower()
-        for factual_keyword in self.factual_keywords:
-            if "the " + factual_keyword.lower() in query:
-                return 0
         for numerical_keyword in self.numerical_keywords:
             if "the " + numerical_keyword.lower() in query:
                 return 1
+        for factual_keyword in self.factual_keywords:
+            if "the " + factual_keyword.lower() in query:
+                return 0
         return -1
