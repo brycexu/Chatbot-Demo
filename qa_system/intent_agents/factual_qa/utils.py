@@ -1,4 +1,7 @@
 import requests
+from urllib.request import urlopen
+import certifi
+import json
 
 def get_ticker_name(company_name):
     '''
@@ -20,10 +23,14 @@ def get_ticker_name(company_name):
     return company_code
 
 
+
 NER_MODEL = {"API_URL": "https://api-inference.huggingface.co/models/dslim/bert-base-NER-uncased",
-             "headers": {"Authorization": "Bearer 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"}}
-SENTENCE_EMBEDDING_MODEL = {"API_URL": "https://api-inference.huggingface.co/models/sentence-transformers/all-MiniLM-L6-v2",
-                            "headers": {"Authorization": "Bearer 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"}}
+             "headers": {"Authorization": "Bearer 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"}}
+SENTENCE_EMBEDDING_MODEL = {
+    "API_URL": "https://api-inference.huggingface.co/models/sentence-transformers/all-MiniLM-L6-v2",
+    "headers": {"Authorization": "Bearer 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"}}
+
+
 def query_model(API_URL, headers, inputs):
     '''
         get huggingface model results from API_URL
@@ -34,3 +41,30 @@ def query_model(API_URL, headers, inputs):
     }
     response = requests.post(API_URL, headers=headers, json=payload)
     return response.json()
+
+
+def get_company_name(query):
+    tokens = query_model(NER_MODEL['API_URL'], NER_MODEL["headers"], query)
+    company_name = None
+    for token in tokens:
+        if token['entity_group'] == 'ORG':
+            company_name = token['word']
+    return company_name
+
+def get_jsonparsed_data(url):
+    """
+    Receive the content of ``url``, parse it as JSON and return the object.
+
+    Parameters
+    ----------
+    url : str
+
+    Returns
+    -------
+    dict
+    """
+    response = urlopen(url, cafile=certifi.where())
+    data = response.read().decode("utf-8")
+    return json.loads(data)
+
+

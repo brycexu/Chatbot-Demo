@@ -1,6 +1,11 @@
 from .ticker import TickerAgent
+import re
 
 def return_zero(query):
+    candidates = re.findall(r'\d+', query)
+    for year in candidates:
+        if year in ['2022','2021','2020','2019','2018']:
+            return 1
     return 0
 
 class FactualQA:
@@ -11,14 +16,14 @@ class FactualQA:
 
         self.intent_id_to_name = {
             0: 'ticker',
-            # ...
+            1: 'ratio',
             # n: 'intent_n'
         }
 
         # intent agents
         self.intent_agents = {
             'ticker': TickerAgent(),  # class that implements an `answer` method
-            # ...
+            'ratio': TickerAgent(),
             # 'intent_n': IntentNQA()
         }
 

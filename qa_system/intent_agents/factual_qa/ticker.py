@@ -2,7 +2,7 @@ import re
 import yfinance as yf
 import numpy as np
 import json
-from qa_system.intent_agents.factual_qa.utils import query_model, NER_MODEL, SENTENCE_EMBEDDING_MODEL
+from qa_system.intent_agents.factual_qa.utils import query_model, get_company_name, SENTENCE_EMBEDDING_MODEL
 from qa_system.intent_agents.factual_qa.utils import get_ticker_name
 
 class TickerAgent:
@@ -15,14 +15,6 @@ class TickerAgent:
         with open(ticker_path, "r") as file:
             ticker_infos = json.load(file)
         return ticker_infos
-
-    def get_company_name(self, query):
-        tokens = query_model(NER_MODEL['API_URL'], NER_MODEL["headers"], query)
-        company_name = None
-        for token in tokens:
-            if token['entity_group'] == 'ORG':
-                company_name = token['word']
-        return company_name
 
     def get_ticker_info(self, company_name):
         tikername = get_ticker_name(company_name)
@@ -53,7 +45,7 @@ class TickerAgent:
         return keys[idx], sentences[idx], scores[idx]
 
     def answer(self, query):
-        company_name = self.get_company_name(query)
+        company_name = get_company_name(query)
         if company_name is None:
             return "Unable to fetch company name", 0
         ticker_info, tikername = self.get_ticker_info(company_name)

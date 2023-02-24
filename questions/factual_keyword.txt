@@ -145,3 +145,57 @@ shares percent shares out
 trailing annual dividend rate
 shares short
 net income to common
+current ratio
+quick ratio
+cash ratio
+days of sales outstanding
+days of inventory outstanding
+operating cycle
+days of payables outstanding
+cash conversion cycle
+gross profit margin
+operating profit margin
+pretax profit margin
+net profit margin
+effective tax rate
+return on assets
+return on equity
+return on capital employed
+net income per EBT
+ebt per ebit
+ebit per revenue
+debt ratio
+debt equity ratio
+long term debt to capitalization
+total debt to capitalization
+interest coverage
+cash flow to debt ratio
+company equity multiplier
+receivables turnover
+payables turnover
+inventory turnover
+fixed asset turnover
+asset turnover
+operating cash flow per share
+free cash flow per share
+cash per share
+payout ratio
+operating cash flow sales ratio
+free cash flow operating cash flow ratio
+cash flow coverage ratios
+short term coverage ratios
+capital expenditure coverage ratio
+dividend paid and capex coverage ratio
+dividend payout ratio
+price book value ratio
+price to book ratio
+price to sales ratio
+price earnings ratio
+price to free cash flows ratio
+price to operating cash flows ratio
+price cash flow ratio
+price earnings to growth ratio
+price sales ratio
+dividend yield
+enterprise value multiple
+price fair value
