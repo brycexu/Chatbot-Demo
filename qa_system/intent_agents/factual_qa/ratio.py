@@ -44,12 +44,14 @@ class RatioAgent:
         company_name = get_company_name(query)
         ticker_name = get_ticker_name(company_name)
         if not ticker_name:
-            return f"Unable to fetch ticker name", 0
+            return f"Unable to fetch ticker name", None, 0
         year = self.get_year(query)
         if not year:
-            return f"Please provide a year between [2018, 2022]", 0
+            return f"Please provide a year between [2018, 2022]", None, 0
         ratio_info = self.get_ratio_info(ticker_name, year)
         key, sentence, score = self.get_key(query, list(ratio_info.keys()), company_name)
-        answer = f"{sentence} is {ratio_info[key]} in {year}."
+        value = ratio_info[key]
+        value = round(value, 4) if type(value) in [int, float] else value
+        answer = f"{sentence} is {value} in {year}."
         return answer, ratio_info[key], score  # answer in sentence form, numerical answer, confidence
 

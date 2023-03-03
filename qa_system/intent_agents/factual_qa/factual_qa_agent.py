@@ -2,18 +2,18 @@ from .ticker import TickerAgent
 from .ratio import RatioAgent
 import re
 
-def return_zero(query):
-    candidates = re.findall(r'\d+', query)
-    for year in candidates:
-        if year in ['2022','2021','2020','2019','2018']:
-            return 1
-    return 0
+def classifier(query):
+    candidates = re.findall(r'.*([1-3][0-9]{3})', query)
+    if candidates:
+        return 1
+    else:
+        return 0
 
 class FactualQA:
 
     def __init__(self):
         # high-level/general intent classifier
-        self.intent_classifier = return_zero  # callable: query -> {0, 1, ..., n_intents}
+        self.intent_classifier = classifier  # callable: query -> {0, 1, ..., n_intents}
 
         self.intent_id_to_name = {
             0: 'ticker',

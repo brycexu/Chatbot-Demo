@@ -37,5 +37,5 @@ input_text = st.text_input("Ask a question: ","", key="widget", on_change=submit
 
 if st.session_state['generated']:
     for i in range(len(st.session_state['generated']) - 1, -1, -1):
-        message(st.session_state["generated"][i], key=str(i))
+        message(st.session_state["generated"][i], key=str(i), is_user=False)
         message(st.session_state['past'][i], is_user=True, key=str(i) + '_user')

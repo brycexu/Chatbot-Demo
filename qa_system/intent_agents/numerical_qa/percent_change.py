@@ -42,7 +42,7 @@ class PercentChangeAgent:
         company = get_company_name(query)
 
         # key
-        aspect, _, _ = get_key(query, company)
+        aspect, _, _, aspect_readable = get_key(query, company)
 
         # years
         years_in_query = YearExtractor()(query)
@@ -53,6 +53,7 @@ class PercentChangeAgent:
 
         args = {
             'aspect': aspect,
+            'aspect_readable': aspect_readable,
             'company': company,
             'start_time': years_in_query[0],
             'end_time': years_in_query[1],
@@ -133,13 +134,19 @@ class PercentChangeAgent:
             else:
                 raise ValueError('Error: retrieval_type not recognized')
             
-            factual_question_answer_pairs[qn_id] = answer_num
+            factual_question_answer_pairs[qn_id] = {
+                'answer_str': answer,
+                'answer_num': answer_num,
+                'score': score
+            }
 
         return factual_question_answer_pairs
 
     
     def _calculate_answer(self, factual_qa_pairs):
-        return (factual_qa_pairs['aspect_at_end'] - factual_qa_pairs['aspect_at_start']) / factual_qa_pairs['aspect_at_start']
+        endval   = factual_qa_pairs['aspect_at_end']['answer_num']
+        startval = factual_qa_pairs['aspect_at_start']['answer_num']
+        return (endval - startval) / startval
 
 
     def answer(self, query):
@@ -158,14 +165,23 @@ class PercentChangeAgent:
             numerical_answer = self._calculate_answer(factual_qa_pairs)
             # print('[RatioAgent.answer] numerical_answer', numerical_answer)
 
-            return (
-                f'The percentage change in '
-                f'the {self.args["aspect"]} '
+            # format evidences
+            evidence_strs = [d['answer_str'] for d in factual_qa_pairs.values()]
+            evidences_str = '\n'.join(evidence_strs)
+
+            # format the final answer
+            endval   = factual_qa_pairs['aspect_at_end']['answer_num']
+            startval = factual_qa_pairs['aspect_at_start']['answer_num']
+            answer_str = (
+                f'So, the percentage change in '
+                f'the {self.args["aspect_readable"]} '
                 f'of {self.args["company"]} '
                 f'between {self.args["start_time"]} '
                 f'and {self.args["end_time"]} '
-                f'is {numerical_answer:.3f}'
-            ), numerical_answer, -1
+                f'is ({endval:.4f} - {startval:.4f}) / {startval:.4f}  = {numerical_answer:.4f}'
+            )
+
+            return f'{evidences_str}\n\n{answer_str}', numerical_answer, -1
         except NotImplementedError:
             return traceback.format_exc()
 

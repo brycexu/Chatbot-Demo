@@ -47,13 +47,15 @@ class TickerAgent:
     def answer(self, query):
         company_name = get_company_name(query)
         if company_name is None:
-            return "Unable to fetch company name", 0
+            return "Unable to fetch company name", None, 0
         ticker_info, tikername = self.get_ticker_info(company_name)
         if ticker_info is None:
             if tikername in self.back_up:
                 ticker_info = self.back_up[tikername]
             else:
-                return f"Unable to fetch ticker information of {company_name}", 0
+                return f"Unable to fetch ticker information of {company_name}", None, 0
         key, sentence, score = self.get_key(query, list(ticker_info.keys()), company_name)
-        answer = f"{sentence} is {ticker_info[key]}."
+        value = ticker_info[key]
+        value = round(value, 4) if type(value) in [int, float] else value
+        answer = f"{sentence} is {value}."
         return answer, ticker_info[key], score
