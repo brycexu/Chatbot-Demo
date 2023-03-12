@@ -7,7 +7,7 @@
 import sys
 sys.path.append("qa_system")
 
-from intent_agents import FactualQA, NumericalQA
+from intent_agents import FactualQA, NumericalQA, ChatGPT
 from intent_classifiers import RuleBasedIntentClassifier, NeuralIntentClassifier
 
 
@@ -38,6 +38,7 @@ class QA:
         # intent id to intent name: map {0, 1, ..., n_intents} -> {'factual', 'numerical', ... 'intent_n'}
         # move this to a common location later so that other parts of the QA shares a single source of truth
         self.intent_id_to_name = {
+            -1: 'chatgpt',
             0: 'factual',
             1: 'numerical',
             # ...
@@ -46,6 +47,7 @@ class QA:
 
         # intent agents
         self.intent_agents = {
+            'chatgpt': ChatGPT(),
             'factual': FactualQA(),  # class that implements an `answer` method
             'numerical': NumericalQA(),  # class that implements an `answer` method
             # ...
@@ -65,7 +67,8 @@ class QA:
         intent_name = self._classify_intent(query)
 
         if not intent_name:
-            return "We are currently unable to answer this category of question."
+            response = self.intent_agents['chatgpt'].answer(query)
+            return response
 
         # pass query to intent handler
         agent = self.intent_agents[intent_name]

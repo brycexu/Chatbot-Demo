@@ -4,6 +4,7 @@ import certifi
 import json
 import re
 import numpy as np
+from config import certificate
 
 
 def get_ticker_name(company_name):
@@ -28,10 +29,10 @@ def get_ticker_name(company_name):
 
 
 NER_MODEL = {"API_URL": "https://api-inference.huggingface.co/models/dslim/bert-base-NER-uncased",
-             "headers": {"Authorization": "Bearer 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"}}
+             "headers": {"Authorization": certificate["HuggingFace"]}}
 SENTENCE_EMBEDDING_MODEL = {
     "API_URL": "https://api-inference.huggingface.co/models/sentence-transformers/all-MiniLM-L6-v2",
-    "headers": {"Authorization": "Bearer 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"}}
+    "headers": {"Authorization": certificate["HuggingFace"]}}
 
 
 def query_model(API_URL, headers, inputs):

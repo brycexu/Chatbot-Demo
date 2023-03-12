@@ -14,10 +14,10 @@ def generate_response(question):
 st.title("BNY Mellon Chatbot Project")
 
 if 'generated' not in st.session_state:
-    st.session_state['generated'] = []
+    st.session_state['generated'] = ["Hello there! How may I assist you today?"]
 
 if 'past' not in st.session_state:
-    st.session_state['past'] = []
+    st.session_state['past'] = ["Hello!"]
 
 if 'submit' not in st.session_state:
     st.session_state.submit = ''
